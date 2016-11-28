@@ -47,12 +47,12 @@ public class Main {
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
-                }else if(operation.equals("MIPSsim")){
+                }else if(operation.equals("sim")){
                     System.out.println("*****************************************");
                     System.out.println("Program Running");
 
                     Simulator simulator = new Simulator(assemblyInstructions);
-
+                    simulator.start();
 
                 }
                 else{

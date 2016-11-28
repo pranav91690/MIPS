@@ -27,8 +27,12 @@ public class Register {
         return this.busy;
     }
 
-    public void changeStatus(){
-        this.busy = !(this.busy);
+    public void setBusy(){
+        this.busy = true;
+    }
+
+    public void setNotBusy(){
+        this.busy = false;
     }
 
     public int getROBNumber() {

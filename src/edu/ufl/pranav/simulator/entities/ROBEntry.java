@@ -14,35 +14,83 @@ import edu.ufl.pranav.Instructions.Instruction;
  * Ready will tell if the instruction is complete and value is ready or not
  */
 public class ROBEntry {
-    int robEntryNumber;
-    boolean ready;
-    Instruction instruction;
-    String state;
-    int destination;
+    int entry;
+    boolean ready = true;
+    boolean resultReady;
+    boolean addressReady;
+    int address;
     long value;
+    Instruction instruction;
+    String destinationRegister;
+    public boolean branchPrediction;
+    public boolean branchOutcome;
+    public int currentPC;
 
+    public ROBEntry(int entry){
+        this.entry = entry;
+    }
 
     public boolean isReady() {
         return ready;
     }
 
-    public void changeStatus() {
-        this.ready = !this.ready;
+    public void setReady(){
+        this.ready = true;
     }
 
-    public void setDestination(int destination) {
-        this.destination = destination;
+    public void setNotReady(){
+        this.ready = false;
+    }
+
+    public void setValue(long value){
+        this.value = value;
+    }
+
+    public void setDestinationRegister(String destinationRegister) {
+        this.destinationRegister = destinationRegister;
     }
 
     public void setInstruction(Instruction instruction) {
         this.instruction = instruction;
     }
 
+    public void setResultReady(boolean resultReady) {
+        this.resultReady = resultReady;
+    }
+
+    public void setAddressReady(boolean addressReady) {
+        this.addressReady = addressReady;
+    }
+
+    public void setAddress(int address) {
+        this.address = address;
+    }
+
     public long getValue() {
         return value;
     }
 
+    public String getDestinationRegister() {
+        return destinationRegister;
+    }
 
+    public Instruction getInstruction() {
+        return instruction;
+    }
 
+    public int getEntryNumber(){
+        return this.entry;
+    }
 
+    public boolean isAddressReady() {
+        return addressReady;
+    }
+
+    public boolean isResultReady() {
+        return resultReady;
+    }
+
+    public int getAddress() {
+        return address;
+    }
 }

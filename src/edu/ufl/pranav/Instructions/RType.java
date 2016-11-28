@@ -1,5 +1,7 @@
 package edu.ufl.pranav.Instructions;
 
+import edu.ufl.pranav.simulator.entities.InstructionStage;
+
 import java.math.BigInteger;
 
 /**
@@ -16,10 +18,12 @@ public class RType implements Instruction {
     String rd;
     String shift;
     String function;
+    InstructionType type;
+    InstructionStage stage = InstructionStage.NOSTAGE;
 
     public RType(String binary, int PC, String opCode,
                  String instruction, String rs, String rt,
-                 String rd, String shift, String function) {
+                 String rd, String shift, String function, InstructionType type) {
         this.binary = binary;
         this.PC = PC;
         this.opCode = opCode;
@@ -29,12 +33,24 @@ public class RType implements Instruction {
         this.rd = rd;
         this.shift = shift;
         this.function = function;
+        this.type = type;
     }
 
     public String buildOutput(){
         return (this.binary + " " + this.PC + " " + buildInstruction());
     }
 
+    public int getPC(){
+        return this.PC;
+    }
+
+    public InstructionType getInstructionType(){
+        return this.type;
+    }
+
+    public String getInstructionName(){
+        return this.instruction;
+    }
 
     public String buildInstruction(){
         if(this.instruction.equals("BREAK") || this.instruction.equals("NOP")){
@@ -46,8 +62,12 @@ public class RType implements Instruction {
         }
     }
 
-    public String getInstructionName(){
-        return this.instruction;
+
+    public InstructionStage getInstructionStage(){
+        return stage;
+    }
+    public void setInstructionStage(InstructionStage stage){
+        this.stage = stage;
     }
 
     public String getRs() {
@@ -60,5 +80,9 @@ public class RType implements Instruction {
 
     public String getRd() {
         return rd;
+    }
+
+    public long getShift() {
+        return Long.parseLong(shift);
     }
 }

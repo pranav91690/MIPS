@@ -92,6 +92,7 @@ public class deAssembler {
             String _d = s.substring(16,21);
             String shift = s.substring(21,26);
             String function = s.substring(26,32);
+            InstructionType instructionType = InstructionType.REGISTER;
 
             String binary = buildBinary(opcode, _s, _t, _d, shift, function);
             String key = "";
@@ -114,6 +115,8 @@ public class deAssembler {
                     String rt = buildRegister(_t);
                     String rd = buildRegister(_d);
 
+                    instructionType = InstructionType.REGISTER;
+
                     // SLT
                     if ("2a".equals(binToHex(function))) {
                         key = "SLT";
@@ -127,18 +130,22 @@ public class deAssembler {
                                 "0".equals(binToHex(_d))  && "0".equals(binToHex(shift))){
                             // NOP
                             key = "NOP";
+                            instructionType = InstructionType.NOP;
                         }else {
                             // SLL
                             key = "SLL";
+                            instructionType = InstructionType.SHIFT;
                         }
                     }
                     // SRL
                     else if ("2".equals(binToHex(function))) {
                         key = "SRL";
+                        instructionType = InstructionType.SHIFT;
                     }
                     // SRA
                     else if ("3".equals(binToHex(function))) {
                         key = "SRA";
+                        instructionType = InstructionType.SHIFT;
                     }
                     // SUB
                     else if ("22".equals(binToHex(function))) {
@@ -176,19 +183,22 @@ public class deAssembler {
                     else if ("d".equals(binToHex(function))) {
                         key = "BREAK";;
                         endOfBreak = true;
+                        instructionType = InstructionType.BREAK;
                     }
 
                     /**
                      * Build the rType instruction and add to the
                      * list of instructions
                      */
-                    ins = new RType(binary,this.PC,opcode,key,rs,rt,rd,shift,function);
+
+                    ins = new RType(binary,this.PC,opcode,key,rs,rt,rd,shift,function,instructionType);
                 }
                 //J
                 // Multiply by four to convert bytes into bits
                 else if ("2".equals(binToHex(opcode))) {
                     String target = _s + _t + _d + shift + function + "00";
-                    ins = new JType(binary,this.PC,opcode,"J",signedBintoDec(target));
+                    instructionType = InstructionType.JUMP;
+                    ins = new JType(binary,this.PC,opcode,"J",signedBintoDec(target),instructionType);
                 }
                 // Rest are I type instructions
                 else {
@@ -202,24 +212,28 @@ public class deAssembler {
                     if ("2b".equals(binToHex(opcode))) {
                         key = "SW";
                         immediate = signedBintoDec(_i);
+                        instructionType = InstructionType.STORE;
 
                     }
                     //LW
                     else if ("23".equals(binToHex(opcode))) {
                         key = "LW";
                         immediate = signedBintoDec(_i);
+                        instructionType = InstructionType.LOAD;
                     }
                     //BEQ
                     else if ("4".equals(binToHex(opcode))) {
                         key = "BEQ";
                         _i = _i + "00";
                         immediate = signedBintoDec(_i);
+                        instructionType = InstructionType.BRANCH;
                     }
                     //BNE
                     else if ("5".equals(binToHex(opcode))) {
                         key = "BNE";
                         _i = _i + "00";
                         immediate = signedBintoDec(_i);
+                        instructionType = InstructionType.BRANCH;
                     }
 
                     else if("1".equals(binToHex(opcode))){
@@ -228,12 +242,14 @@ public class deAssembler {
                             key = "BGEZ";
                             _i = _i + "00";
                             immediate = signedBintoDec(_i);
+                            instructionType = InstructionType.BRANCH;
                         }
                         //BLTZ
                         else if("1".equals(binToHex(_d))){
                             key = "BLTZ";
                             _i = _i + "00";
                             immediate = signedBintoDec(_i);
+                            instructionType = InstructionType.BRANCH;
                         }
                     }
                     //BGTZ
@@ -241,31 +257,36 @@ public class deAssembler {
                         key = "BGTZ";
                         _i = _i + "00";
                         immediate = signedBintoDec(_i);
+                        instructionType = InstructionType.BRANCH;
                     }
                     //BLEZ
                     else if("6".equals(binToHex(opcode))){
                         key = "BLEZ";
                         _i = _i + "00";
                         immediate = signedBintoDec(_i);
+                        instructionType = InstructionType.BRANCH;
                     }
                     //ADDI
                     else if ("8".equals(binToHex(opcode))) {
                         key = "ADDI";
                         immediate = signedBintoDec(_i);
+                        instructionType = InstructionType.IMMEDIATE;
                     }
                     // ADDIU
                     else if ("9".equals(binToHex(function))) {
                         key = "ADDIU";
                         immediate = binToDec(_i);
+                        instructionType = InstructionType.IMMEDIATE;
                     }
 
                     //SLTI
                     else if ("a".equals(binToHex(opcode))) {
                         key = "SLTI";
                         immediate = signedBintoDec(_i);
+                        instructionType = InstructionType.IMMEDIATE;
                     }
 
-                    ins = new IType(binary,this.PC,opcode,key,rs,rt,immediate);
+                    ins = new IType(binary,this.PC,opcode,key,rs,rt,immediate,instructionType);
 
                 }
             }else{
