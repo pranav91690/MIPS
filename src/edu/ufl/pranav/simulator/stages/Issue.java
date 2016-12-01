@@ -193,6 +193,9 @@ public class Issue {
                     rsEntry.setBusy();
                     rsEntry.setROBEntry(b);
                     instruction.setInstructionStage(InstructionStage.ISSUED);
+                }else{
+                    // Remove the RS entry
+                    reservationStations.remove(rsEntry);
                 }
                 robEntry.setNotReady();
                 robEntry.setInstruction(instruction);

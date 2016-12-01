@@ -59,10 +59,6 @@ public class RS {
         this.result = result;
     }
 
-    public void setLoadStoreStageOneDone(boolean loadStoreStageOneDone) {
-        this.loadStoreStageOneDone = loadStoreStageOneDone;
-    }
-
     public void setPC(int PC){
         this.PC = PC;
     }
@@ -87,16 +83,8 @@ public class RS {
         return Qk;
     }
 
-    public long getVj() {
-        return Vj;
-    }
-
     public long getVk() {
         return Vk;
-    }
-
-    public long getA() {
-        return A;
     }
 
     public int getROBEntry() {
@@ -123,16 +111,8 @@ public class RS {
         this.busy = true;
     }
 
-    public void setNotBusy(){
-        this.busy = false;
-    }
-
     public void setResultReady(){
         this.resultReady  = true;
-    }
-
-    public boolean isLoadStoreStageOneDone() {
-        return loadStoreStageOneDone;
     }
 
     public void clearStation(){

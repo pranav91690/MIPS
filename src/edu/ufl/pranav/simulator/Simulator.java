@@ -4,8 +4,6 @@ import edu.ufl.pranav.Instructions.*;
 import edu.ufl.pranav.simulator.entities.InstructionStage;
 import edu.ufl.pranav.simulator.stages.*;
 import edu.ufl.pranav.simulator.units.*;
-
-import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +15,8 @@ public class Simulator {
     int cycle = 1;
     List<Instruction> instructions = new ArrayList<Instruction>();
     boolean breakProcessed = false;
+    int startCycle;
+    int endCycle;
 
     /**
      * Initialize the Fuctional Units
@@ -51,9 +51,11 @@ public class Simulator {
      *
 
      */
-    public Simulator(List<Instruction> instructions)
+    public Simulator(List<Instruction> instructions,int startCycle, int endCycle)
     {
         this.PC = 600;
+        this.startCycle = startCycle;
+        this.endCycle = endCycle;
 
         for(Instruction ins : instructions){
             if(ins instanceof RType ||  ins instanceof IType || ins instanceof JType){
@@ -69,16 +71,22 @@ public class Simulator {
     /**
      * Run the program until BREAK instruction is found
      */
-    public void start(){
-
+    public String start(){
+        StringBuilder sb = new StringBuilder();
         while(!breakProcessed){
             instructionFetch.run();
             issue.run();
             execute.run();
             writeResult.run();
             breakProcessed = commit.run();
-            if(cycle >48 && cycle < 70) {
-                System.out.println(printProcessorState());
+            if(startCycle == -1 && endCycle == -1){
+                sb.append(printProcessorState());
+                sb.append(System.getProperty("line.separator"));
+            }else {
+                if (cycle >= startCycle && cycle <= endCycle) {
+                    sb.append(printProcessorState());
+                    sb.append(System.getProperty("line.separator"));
+                }
             }
             cycle += 1;
 
@@ -97,7 +105,11 @@ public class Simulator {
             }
         }
 
-        System.out.println("End of Program");
+        if(startCycle == 0 && endCycle == 0){
+            sb.append(printProcessorState());
+        }
+
+        return sb.toString();
     }
 
     public String printProcessorState(){

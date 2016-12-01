@@ -5,6 +5,9 @@ import edu.ufl.pranav.Instructions.JType;
 import edu.ufl.pranav.simulator.entities.*;
 import edu.ufl.pranav.simulator.units.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by pranav on 10/31/16.
  */
@@ -56,6 +59,8 @@ public class Commit {
                             station.clearStation();
                         }
                     }
+
+                    reservationStations.clear();
                }
            }else if(instructionType == InstructionType.STORE){
                int address = head.getAddress();
@@ -84,6 +89,8 @@ public class Commit {
                            station.clearStation();
                        }
                    }
+
+                   reservationStations.clear();
                }else{
 //                   instructionFetch.updatePC(target_pc);
                    branchTargetBuffer.get(instruction.getPC()).incrementTimesHit();
@@ -93,11 +100,17 @@ public class Commit {
            }
 
 
-           // Clear the Corresponding Reservation Station
+           List<RS> toBeCleared = new ArrayList<RS>();
+           // Clear the Corresponding Reservation Stations
            for(RS station : reservationStations.getAllStations()){
                if(station.isBusy() && station.getROBEntry() == robEntryNumber){
                    station.clearStation();
+                   toBeCleared.add(station);
                }
+           }
+
+           for(RS station : toBeCleared){
+               reservationStations.remove(station);
            }
            // Remove the entry from the ROB
            reOrderBuffer.poll();

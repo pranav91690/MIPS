@@ -1,9 +1,7 @@
 package edu.ufl.pranav.simulator.stages;
 
-import edu.ufl.pranav.Instructions.IType;
 import edu.ufl.pranav.Instructions.Instruction;
 import edu.ufl.pranav.Instructions.InstructionType;
-import edu.ufl.pranav.Instructions.JType;
 import edu.ufl.pranav.simulator.entities.BTBEntry;
 import edu.ufl.pranav.simulator.entities.InstructionStage;
 import edu.ufl.pranav.simulator.units.BranchTargetBuffer;

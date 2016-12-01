@@ -11,31 +11,25 @@ public class ReservationStations {
     ArrayList<RS> stations = new ArrayList<RS>();
 
     public ReservationStations(){
-        for(int i = 0; i<10; i++){
-            stations.add(i,new RS());
-        }
+
+    }
+
+    public void remove(RS station){
+        stations.remove(station);
+    }
+
+    public void clear(){
+        stations.clear();
     }
 
     public boolean allStationsBusy(){
-        boolean status = true;
-        for(RS station : stations){
-            if(!station.isBusy()){
-                status = false;
-                break;
-            }
-        }
-
-        return status;
+        return !(stations.size() < 10);
     }
 
     public RS getAvailableStation(){
-        for(RS station : stations){
-            if(!station.isBusy()) {
-                return station;
-            }
-        }
-
-        return null;
+        RS n = new RS();
+        stations.add(n);
+        return n;
     }
 
     public ArrayList<RS> getAllStations(){
